@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="semaphore.h">
+      <Filter>pthread</Filter>
+    </ClInclude>
+    <ClInclude Include="sched.h">
+      <Filter>pthread</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread.h">
+      <Filter>pthread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pthread_async.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="pthread">
+      <UniqueIdentifier>{8e48f841-f70f-49ac-89f1-d95b32481dd7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
