@@ -10,13 +10,21 @@
     <ClInclude Include="pthread.h">
       <Filter>pthread</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pthread_async.c" />
+    <ClInclude Include="thread.h" />
+    <ClInclude Include="alloc.h" />
+    <ClInclude Include="struct.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pthread">
       <UniqueIdentifier>{8e48f841-f70f-49ac-89f1-d95b32481dd7}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pthread_lib.lib">
+      <Filter>pthread</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c" />
   </ItemGroup>
 </Project>
