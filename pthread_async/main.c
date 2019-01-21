@@ -1,9 +1,6 @@
-﻿
-#include "thread.h"
+﻿#include "thread.h"
 
-#define C_INT    (13)
-#define R_INT    (10)
-#define W_INT    (2)
+#define TH_INT    (6)
 
 struct rwarg {
     pthread_t id;
@@ -25,38 +22,32 @@ int main(int argc, char * argv[]) {
     // 初始化 rwarg::rwlock
     struct rwarg arg = { .lock = PTHREAD_RWLOCK_INITIALIZER, };
 
-    // 读线程跑起来
-    for (int i = 0; i < R_INT; ++i)
+    // 读写线程跑起来
+    for (int i = 0; i < TH_INT; ++i) {
         pthread_async(reads, &arg);
-
-    // 写线程跑起来
-    for (int i = 0; i < W_INT; ++i)
         pthread_async(write, &arg);
+        pthread_async(reads, &arg);
+    }
 
     // 简单等待一下
-    printf("sleep input enter:");
-    getchar();
-
-    return EXIT_SUCCESS;
+    puts("sleep input enter:");
+    return getchar();
 }
 
 // write - 写线程, 随机写字符
 void 
 write(struct rwarg * arg) {
     pthread_rwlock_wrlock(&arg->lock);
-    while(arg->idx < C_INT) {
-        arg->buf[arg->idx] = 'a' + arg->idx;
-        ++arg->idx;
-    }
+    arg->buf[arg->idx] = 'a' + arg->idx;
+    ++arg->idx;
+    printf("write idx[%-2d], buf[%-9s]\n", arg->idx, arg->buf);
     pthread_rwlock_unlock(&arg->lock);
 }
 
 // reads - 读线程
 void 
 reads(struct rwarg * arg) {
-    while(arg->idx < C_INT) {
-        pthread_rwlock_rdlock(&arg->lock);
-        puts(arg->buf);
-        pthread_rwlock_unlock(&arg->lock);
-    }
+    pthread_rwlock_rdlock(&arg->lock);
+    printf("reads idx[%2d], buf[%9s]\n", arg->idx, arg->buf);
+    pthread_rwlock_unlock(&arg->lock);
 }
