@@ -1,12 +1,14 @@
 ﻿#include "thread.h"
 
-#define TH_INT    (6)
-
 struct rwarg {
-    pthread_t id;
-    pthread_rwlock_t lock;    // 读写锁
-    char buf[BUFSIZ];         // 存储数据
-    int idx;                  // buf 索引
+    pthread_rwlock_t lock;  // 读写锁
+
+    unsigned id;            // 标识
+
+    // conf 配置
+    struct {
+        char * description; // 描述
+    };
 };
 
 // write - 写线程, 随机写字符
@@ -20,14 +22,20 @@ void reads(struct rwarg * arg);
  */
 int main(int argc, char * argv[]) {
     // 初始化 rwarg::rwlock
-    struct rwarg arg = { .lock = PTHREAD_RWLOCK_INITIALIZER, };
+    struct rwarg arg = { 
+        .lock = PTHREAD_RWLOCK_INITIALIZER,
+        .description = "爱我中华",
+    };
 
-    // 读写线程跑起来
-    for (int i = 0; i < TH_INT; ++i) {
+    // 写程序跑起来
+    pthread_async(reads, &arg);
+
+    // 读线程跑起来
+    for (int i = 0; i < 10; ++i)
         pthread_async(reads, &arg);
-        pthread_async(write, &arg);
-        pthread_async(reads, &arg);
-    }
+
+    // 写程序跑起来
+    pthread_async(reads, &arg);
 
     // 简单等待一下
     puts("sleep input enter:");
@@ -38,9 +46,9 @@ int main(int argc, char * argv[]) {
 void 
 write(struct rwarg * arg) {
     pthread_rwlock_wrlock(&arg->lock);
-    arg->buf[arg->idx] = 'a' + arg->idx;
-    ++arg->idx;
-    printf("write idx[%-2d], buf[%-9s]\n", arg->idx, arg->buf);
+    ++arg->id;
+    arg->description = arg->id%2 ? "为人民服务" : "才刚刚开始";
+    printf("write id[%u][%s]\n", arg->id, arg->description);
     pthread_rwlock_unlock(&arg->lock);
 }
 
@@ -48,6 +56,7 @@ write(struct rwarg * arg) {
 void 
 reads(struct rwarg * arg) {
     pthread_rwlock_rdlock(&arg->lock);
-    printf("reads idx[%2d], buf[%9s]\n", arg->idx, arg->buf);
+    ++arg->id;
+    printf("reads id[%u][%s]\n", arg->id, arg->description);
     pthread_rwlock_unlock(&arg->lock);
 }
