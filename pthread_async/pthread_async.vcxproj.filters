@@ -13,6 +13,8 @@
     <ClInclude Include="thread.h" />
     <ClInclude Include="alloc.h" />
     <ClInclude Include="struct.h" />
+    <ClInclude Include="..\..\..\simplec\simplec\module\service\include\scthreads.h" />
+    <ClInclude Include="threads.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pthread">
@@ -26,5 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="threads.c" />
   </ItemGroup>
 </Project>

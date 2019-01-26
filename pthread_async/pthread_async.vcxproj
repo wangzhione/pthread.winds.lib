@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>PTW32_STATIC_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4711;4098</DisableSpecificWarnings>
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
@@ -127,6 +127,7 @@
       <PreprocessorDefinitions>PTW32_STATIC_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableSpecificWarnings>4711;4098;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -136,15 +137,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\simplec\simplec\module\service\include\scthreads.h" />
     <ClInclude Include="alloc.h" />
     <ClInclude Include="pthread.h" />
     <ClInclude Include="sched.h" />
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="thread.h" />
+    <ClInclude Include="threads.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="threads.c" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="pthread_lib.lib" />
