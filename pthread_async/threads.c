@@ -39,7 +39,7 @@ struct threads {
 static void threads_add(struct threads * pool, pthread_t id) {
     struct thread * thrd = malloc(sizeof(struct thread));
     thrd->next = pool->thrs;
-    thrd->cond = PTHREAD_COND_INITIALIZER;
+    pthread_cond_init(&thrd->cond, NULL);
     thrd->wait = false;
     thrd->id = id;
 
@@ -57,6 +57,8 @@ static void threads_del(struct threads * pool, pthread_cond_t * cond) {
                 prev->next = head->next;
             else
                 pool->thrs = head->next;
+
+            pthread_cond_destroy(cond);
             return free(head);
         }
         prev = head;
@@ -97,7 +99,7 @@ inline threads_t
 threads_create(void) {
     struct threads * pool = calloc(1, sizeof(struct threads));
     pool->size = THREADS_INT;
-    pool->mutx = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_init(&pool->mutx, NULL);
     return pool;
 }
 
@@ -139,6 +141,7 @@ threads_delete(threads_t pool) {
         thrs = next;
     }
 
+    pthread_mutex_destroy(&pool->mutx);
     // 销毁自己
     free(pool);
 }
